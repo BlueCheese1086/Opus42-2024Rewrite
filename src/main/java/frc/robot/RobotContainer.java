@@ -4,11 +4,8 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -16,7 +13,6 @@ import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Intake.*;
 import frc.robot.commands.Tower.*;
 import frc.robot.subsystems.*;
-//import frc.robot.Constants.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,8 +45,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command is arcade drive. This will run unless another command
     // is scheduled over it.
-    drivetrain.setDefaultCommand(joystickArcadeDrive());
+    drivetrain.setDefaultCommand(xboxTankDrive());
     String defaultCommand = drivetrain.getDefaultCommand().getName();          
+    
+    System.out.println(defaultCommand);
     
     new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake));
     new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake));
@@ -72,22 +70,34 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
+   * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
+   * Input type: Joystick (May require extra modification due to differences in joystick mapping.)
+   * @return the command to run in teleop
    */
   public Command joystickArcadeDrive() {
-    // An ExampleCommand will run in autonomous
+    // An ArcadeDrive command will run in teleop.
     return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(2), () -> -joystick.getRawAxis(1), Constants.Drivetrain.squareInputs);
   }
   
-
+  /**
+   * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
+   * Input type: Xbox Remote
+   * 
+   * @return the command to run in teleop
+   */
   public Command xboxArcadeDrive() {
-    // An ExampleCommand will run in autonomous
+    // An ArcadeDrive command will run in teleop.
     return new ArcadeDrive(drivetrain, () -> -xbox.getLeftY(), () -> xbox.getRightX(), Constants.Drivetrain.squareInputs);
   }
 
+  /**
+   * Use this to pass the TankDrive command to the main {@link Robot} class.
+   * Input type: Xbox Remote
+   * 
+   * @return the command to run in teleop
+   */
   public Command xboxTankDrive(){
+    // A TankDrive command will run in teleop.
     return new TankDrive(drivetrain, () -> -xbox.getLeftY(), () -> -xbox.getRightY(), false);
   }
 }   

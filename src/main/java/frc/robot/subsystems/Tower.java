@@ -22,6 +22,16 @@ public class Tower extends SubsystemBase{
     public Tower(){
         // Firmware reset
         Reset.reset(motors);
+
+        tower4.follow(tower1, true);
+        tower3.follow(tower1);
+        tower4.follow(tower1, true);
+        /*
+            tower1, + input
+            tower2, - input
+            tower3, + input
+            tower4, - input
+        */
     }
 
     public void runTower(){
