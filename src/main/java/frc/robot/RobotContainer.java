@@ -46,7 +46,7 @@ public class RobotContainer {
     // Default command is arcade drive. This will run unless another command
     // is scheduled over it.
     drivetrain.setDefaultCommand(xboxTankDrive());
-    String defaultCommand = drivetrain.getDefaultCommand().getName();          
+    String defaultCommand = drivetrain.getDefaultCommand().toString();          
     
     System.out.println(defaultCommand);
     
@@ -72,7 +72,7 @@ public class RobotContainer {
   /**
    * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
    * Input type: Joystick (May require extra modification due to differences in joystick mapping.)
-   * @return the command to run in teleop
+   * @return The command to run in teleop.
    */
   public Command joystickArcadeDrive() {
     // An ArcadeDrive command will run in teleop.
@@ -83,7 +83,7 @@ public class RobotContainer {
    * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
    * Input type: Xbox Remote
    * 
-   * @return the command to run in teleop
+   * @return The command to run in teleop.
    */
   public Command xboxArcadeDrive() {
     // An ArcadeDrive command will run in teleop.
@@ -92,9 +92,19 @@ public class RobotContainer {
 
   /**
    * Use this to pass the TankDrive command to the main {@link Robot} class.
+   * Input type: Joystick (May require extra modification due to differences in joystick mapping.)
+   * @return The command to run in teleop.
+   */
+  public Command joystickTankDrive(){
+    // A TankDrive command will run in teleop.
+    return new TankDrive(drivetrain, () -> joystick.getRawAxis(2), () -> joystick.getRawAxis(1), false);
+  }
+
+  /**
+   * Use this to pass the TankDrive command to the main {@link Robot} class.
    * Input type: Xbox Remote
    * 
-   * @return the command to run in teleop
+   * @return The command to run in teleop.
    */
   public Command xboxTankDrive(){
     // A TankDrive command will run in teleop.
