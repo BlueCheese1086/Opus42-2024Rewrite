@@ -50,14 +50,12 @@ public class RobotContainer {
     
     System.out.println(defaultCommand);
     
-    new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake));
-    new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake));
-    new JoystickButton(joystick, 3).whileTrue(new ClearIntake(intake));
+    new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake)); // Opens and Closes the intake.
+    new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake)); // Runs the intake.
+    new JoystickButton(joystick, 3).whileTrue(new ClearIntake(intake)); // Runs the intake, but in reverse.
 
-    new JoystickButton(joystick, 5).whileTrue(new RunTower(tower));
-    new JoystickButton(joystick, 6).whileTrue(new ClearTower(tower));
-      
-    // Add launcher capability for Joysticks
+    new JoystickButton(joystick, 5).whileTrue(new RunTower(tower)); // Runs the tower.
+    new JoystickButton(joystick, 6).whileTrue(new ClearTower(tower)); // Runs the tower, but in reverse.
     
     /*
     new JoystickButton(xbox, Button.kX.value).onTrue(new ToggleIntake(intake));
@@ -72,10 +70,10 @@ public class RobotContainer {
   /**
    * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
    * Input type: Joystick (May require extra modification due to differences in joystick mapping.)
+   * 
    * @return The command to run in teleop.
    */
   public Command joystickArcadeDrive() {
-    // An ArcadeDrive command will run in teleop.
     return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(2), () -> -joystick.getRawAxis(1), Constants.Drivetrain.squareInputs);
   }
   
@@ -86,7 +84,6 @@ public class RobotContainer {
    * @return The command to run in teleop.
    */
   public Command xboxArcadeDrive() {
-    // An ArcadeDrive command will run in teleop.
     return new ArcadeDrive(drivetrain, () -> -xbox.getLeftY(), () -> xbox.getRightX(), Constants.Drivetrain.squareInputs);
   }
 
@@ -96,7 +93,6 @@ public class RobotContainer {
    * @return The command to run in teleop.
    */
   public Command joystickTankDrive(){
-    // A TankDrive command will run in teleop.
     return new TankDrive(drivetrain, () -> joystick.getRawAxis(2), () -> joystick.getRawAxis(1), false);
   }
 
