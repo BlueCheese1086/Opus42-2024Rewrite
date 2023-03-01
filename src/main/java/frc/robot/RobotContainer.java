@@ -1,9 +1,6 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
+// Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,7 +13,7 @@ import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link RobotMain}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
@@ -37,20 +34,16 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * Use this method to define your button-based command mappings. Buttons can be created by
+   * creating an instance of {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Default command is arcade drive. This will run unless another command
-    // is scheduled over it.
-    drivetrain.setDefaultCommand(xboxTankDrive());
-    String defaultCommand = drivetrain.getDefaultCommand().toString();          
+    // Default command is xboxArcadeDrive. This command will run unless another command is listed below.
+    drivetrain.setDefaultCommand(xboxTankDrive()); 
     
-    System.out.println(defaultCommand);
-    
-    new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake)); // Opens and Closes the intake.
+    new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake)); // Opens and closes the intake.
     new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake)); // Runs the intake.
     new JoystickButton(joystick, 3).whileTrue(new ClearIntake(intake)); // Runs the intake, but in reverse.
 
@@ -67,9 +60,11 @@ public class RobotContainer {
     */
   }
 
+  // NOTE: All commands with "Joystick" in the name may require extra modification due to differences in joystick mapping.
+
   /**
-   * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
-   * Input type: Joystick (May require extra modification due to differences in joystick mapping.)
+   * Use this to pass the ArcadeDrive command to the main {@link RobotMain} class.
+   * Input type: Joystick
    * 
    * @return The command to run in teleop.
    */
@@ -78,7 +73,7 @@ public class RobotContainer {
   }
   
   /**
-   * Use this to pass the ArcadeDrive command to the main {@link Robot} class.
+   * Use this to pass the ArcadeDrive command to the main {@link RobotMain} class.
    * Input type: Xbox Remote
    * 
    * @return The command to run in teleop.
@@ -88,22 +83,21 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to pass the TankDrive command to the main {@link Robot} class.
-   * Input type: Joystick (May require extra modification due to differences in joystick mapping.)
+   * Use this to pass the TankDrive command to the main {@link RobotMain} class.
+   * Input type: Joystick
    * @return The command to run in teleop.
    */
   public Command joystickTankDrive(){
-    return new TankDrive(drivetrain, () -> joystick.getRawAxis(2), () -> joystick.getRawAxis(1), false);
+    return new TankDrive(drivetrain, () -> joystick.getRawAxis(2), () -> joystick.getRawAxis(1), Constants.Drivetrain.squareInputs);
   }
 
   /**
-   * Use this to pass the TankDrive command to the main {@link Robot} class.
+   * Use this to pass the TankDrive command to the main {@link RobotMain} class.
    * Input type: Xbox Remote
    * 
    * @return The command to run in teleop.
    */
   public Command xboxTankDrive(){
-    // A TankDrive command will run in teleop.
-    return new TankDrive(drivetrain, () -> -xbox.getLeftY(), () -> -xbox.getRightY(), false);
+    return new TankDrive(drivetrain, () -> -xbox.getLeftY(), () -> -xbox.getRightY(), Constants.Drivetrain.squareInputs);
   }
 }   
