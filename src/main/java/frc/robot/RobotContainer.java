@@ -3,6 +3,7 @@ package frc.robot;
 // Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -20,7 +21,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   // Controllers
   private final Joystick joystick = new Joystick(1);
-  private final XboxController xbox = new XboxController(2);
+  private final XboxController xbox = new XboxController(0);
 
   // Subsystems
   private final Drivetrain drivetrain = new Drivetrain();
@@ -41,23 +42,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default command is xboxArcadeDrive. This command will run unless another command is listed below.
-    drivetrain.setDefaultCommand(xboxTankDrive()); 
-    
+    drivetrain.setDefaultCommand(xboxArcadeDrive()); 
+    /*
     new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake)); // Opens and closes the intake.
     new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake)); // Runs the intake.
     new JoystickButton(joystick, 3).whileTrue(new ClearIntake(intake)); // Runs the intake, but in reverse.
 
     new JoystickButton(joystick, 5).whileTrue(new RunTower(tower)); // Runs the tower.
     new JoystickButton(joystick, 6).whileTrue(new ClearTower(tower)); // Runs the tower, but in reverse.
+    */
     
-    /*
     new JoystickButton(xbox, Button.kX.value).onTrue(new ToggleIntake(intake));
     new JoystickButton(xbox, Button.kA.value).whileTrue(new RunIntake(intake));
     new JoystickButton(xbox, Button.kB.value).whileTrue(new ClearIntake(intake));
 
     new JoystickButton(xbox, Button.kLeftBumper.value).whileTrue(new RunTower(tower));
     new JoystickButton(xbox, Button.kRightBumper.value).whileTrue(new ClearTower(tower));
-    */
   }
 
   // NOTE: All commands with "Joystick" in the name may require extra modification due to differences in joystick mapping.
@@ -69,7 +69,7 @@ public class RobotContainer {
    * @return The command to run in teleop.
    */
   public Command joystickArcadeDrive() {
-    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(2), () -> -joystick.getRawAxis(1), Constants.Drivetrain.squareInputs);
+    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), Constants.Drivetrain.squareInputs);
   }
   
   /**
@@ -79,7 +79,7 @@ public class RobotContainer {
    * @return The command to run in teleop.
    */
   public Command xboxArcadeDrive() {
-    return new ArcadeDrive(drivetrain, () -> -xbox.getLeftY(), () -> xbox.getRightX(), Constants.Drivetrain.squareInputs);
+    return new ArcadeDrive(drivetrain, () -> xbox.getRightX(), () -> -xbox.getLeftY(), Constants.Drivetrain.squareInputs);
   }
 
   /**
