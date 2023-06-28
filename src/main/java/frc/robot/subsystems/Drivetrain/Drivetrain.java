@@ -26,8 +26,9 @@ public class Drivetrain extends SubsystemBase{
         Reset.reset(motors);
 
         frontLeftMotor.setInverted(true);
-        backLeftMotor.follow(frontLeftMotor);
-        backRightMotor.follow(frontRightMotor);
+        backLeftMotor.follow(frontLeftMotor, false);
+        frontRightMotor.setInverted(false);
+        backRightMotor.follow(frontRightMotor, false);
     }
 
     @Override

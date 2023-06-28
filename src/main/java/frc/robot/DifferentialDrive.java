@@ -102,12 +102,6 @@ public class DifferentialDrive extends RobotDriveBase implements Sendable, AutoC
    */
   @SuppressWarnings("ParameterName")
   public void arcadeDrive(double xSpeed, double zRotation, boolean squareInputs) {
-    if (!m_reported) {
-      HAL.report(
-          tResourceType.kResourceType_RobotDrive, tInstances.kRobotDrive2_DifferentialArcade, 2);
-      m_reported = true;
-    }
-
     xSpeed = MathUtil.applyDeadband(xSpeed, m_deadband);
     zRotation = MathUtil.applyDeadband(zRotation, m_deadband);
 
