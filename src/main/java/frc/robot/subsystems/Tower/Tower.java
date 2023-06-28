@@ -1,10 +1,10 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Tower;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
-import frc.robot.commands.Reset;
+import frc.robot.Reset;
 
 public class Tower extends SubsystemBase{
     // Motor declaration

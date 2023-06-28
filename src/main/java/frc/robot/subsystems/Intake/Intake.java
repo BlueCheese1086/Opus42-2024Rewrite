@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
-import frc.robot.commands.Reset;
+import frc.robot.Reset;
 
 public class Intake extends SubsystemBase{
     // Motor + Solenoid config
@@ -28,21 +28,9 @@ public class Intake extends SubsystemBase{
         intakeSolenoid.toggle();
     }
 
-    public void runIntake(){
+    public void setSpeed(double speed){
         if (intakeSolenoid.get()){
-            topIntakeMotor.set(0.75);
-        }
-    }
-    
-    public void clearIntake(){
-        if (intakeSolenoid.get()){
-            topIntakeMotor.set(-0.75);
-        }
-    }
-
-    public void stopIntake(){
-        if (intakeSolenoid.get()){
-            topIntakeMotor.set(0);
+            topIntakeMotor.set(speed * 3/4);
         }
     }
 }

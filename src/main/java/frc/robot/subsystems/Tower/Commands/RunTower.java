@@ -1,18 +1,18 @@
-package frc.robot.commands.Tower;
+package frc.robot.subsystems.Tower.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Tower;
+import frc.robot.subsystems.Tower.Tower;
 
-public class ClearTower extends CommandBase {
+public class RunTower extends CommandBase {
     private final Tower tower;
 
-    public ClearTower(Tower tower){
+    public RunTower(Tower tower){
         this.tower = tower;
     }
 
     @Override
     public void execute() {
-        tower.clearTower();
+        tower.runTower();
     }
 
     @Override

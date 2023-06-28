@@ -1,9 +1,9 @@
-package frc.robot.commands.Drivetrain;
+package frc.robot.subsystems.Drivetrain.Commands;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
 
 public class TankDrive extends CommandBase{
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})

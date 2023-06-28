@@ -15,60 +15,8 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 
 /**
- * A class for driving differential drive/skid-steer drive platforms such as the Kit of Parts drive
- * base, "tank drive", or West Coast Drive.
- *
- * <p>These drive bases typically have drop-center / skid-steer with two or more wheels per side
- * (e.g., 6WD or 8WD). This class takes a MotorController per side. For four and six motor
- * drivetrains, construct and pass in {@link
- * edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup} instances as follows.
- *
- * <p>Four motor drivetrain:
- *
- * <pre><code>
- * public class Robot {
- *   MotorController m_frontLeft = new PWMVictorSPX(1);
- *   MotorController m_rearLeft = new PWMVictorSPX(2);
- *   MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
- *
- *   MotorController m_frontRight = new PWMVictorSPX(3);
- *   MotorController m_rearRight = new PWMVictorSPX(4);
- *   MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
- *
- *   DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
- * }
- * </code></pre>
- *
- * <p>Six motor drivetrain:
- *
- * <pre><code>
- * public class Robot {
- *   MotorController m_frontLeft = new PWMVictorSPX(1);
- *   MotorController m_midLeft = new PWMVictorSPX(2);
- *   MotorController m_rearLeft = new PWMVictorSPX(3);
- *   MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_midLeft, m_rearLeft);
- *
- *   MotorController m_frontRight = new PWMVictorSPX(4);
- *   MotorController m_midRight = new PWMVictorSPX(5);
- *   MotorController m_rearRight = new PWMVictorSPX(6);
- *   MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_midRight, m_rearRight);
- *
- *   DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
- * }
- * </code></pre>
- *
- * <p>A differential drive robot has left and right wheels separated by an arbitrary width.
- *
- * <p>Drive base diagram:
- *
- * <pre>
- * |_______|
- * | |   | |
- *   |   |
- * |_|___|_|
- * |       |
- * </pre>
- *
+ * A class for driving differential drive/skid-steer drive platforms such as the Kit of Parts drive base, "tank drive", or West Coast Drive.
+ * 
  * <p>Each drive() function provides different inverse kinematic relations for a differential drive
  * robot. Motor outputs for the right side are negated, so motor direction inversion by the user is
  * usually unnecessary.

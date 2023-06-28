@@ -1,13 +1,16 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Shooter;
+
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DifferentialDrive;
+import frc.robot.Reset;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
-import frc.robot.commands.Reset;
 
-public class Drivetrain extends SubsystemBase{
+public class Shooter extends SubsystemBase{
     // Motor config
     private final CANSparkMax frontLeftMotor = new CANSparkMax(Constants.Drivetrain.FRONT_LEFT_ID, MotorType.kBrushless);
     private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_ID, MotorType.kBrushless);
@@ -21,7 +24,7 @@ public class Drivetrain extends SubsystemBase{
     public final DifferentialDrive diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
     /** Creates a new Drivetrain. */
-    public Drivetrain() {
+    public Shooter() {
         Reset.reset(motors);
 
         frontLeftMotor.setInverted(true);
