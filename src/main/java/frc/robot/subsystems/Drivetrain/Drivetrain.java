@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Drivetrain;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DifferentialDrive;
 import frc.robot.Reset;
@@ -14,6 +16,9 @@ public class Drivetrain extends SubsystemBase{
     private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_ID, MotorType.kBrushless);
     private final CANSparkMax backLeftMotor = new CANSparkMax(Constants.Drivetrain.BACK_LEFT_ID, MotorType.kBrushless);
     private final CANSparkMax backRightMotor = new CANSparkMax(Constants.Drivetrain.BACK_RIGHT_ID, MotorType.kBrushless);
+
+    // Encoder config
+    private final RelativeEncoder frontLeftEncoder = frontLeftMotor.getEncoder();
 
     // List for quick reset
     private final CANSparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
@@ -39,10 +44,19 @@ public class Drivetrain extends SubsystemBase{
 
     public void arcadeDrive(double xAxisSpeed, double zAxisRotate, boolean squareInputs){
         diffDrive.arcadeDrive(xAxisSpeed, zAxisRotate, squareInputs);
-        
     }
 
     public void tankDrive(double leftMotor, double rightMotor, boolean squareInputs){
         diffDrive.tankDrive(leftMotor, rightMotor, squareInputs);
+    }
+
+    public double getInches() {
+        double result = frontLeftMotor.getEncoder().getPosition();
+
+        return result;
+    }
+
+    public void resetEncoders() {
+
     }
 }

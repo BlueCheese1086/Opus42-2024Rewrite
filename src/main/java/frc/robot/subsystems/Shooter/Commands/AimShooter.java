@@ -19,7 +19,7 @@ public class AimShooter extends CommandBase {
 
     @Override
     public void execute() {
-        intake.setSpeed(speed);
+        shooter.setSpeed(speed);
     }
 
     @Override
@@ -28,6 +28,6 @@ public class AimShooter extends CommandBase {
     }
 
     public void end(boolean interr) {
-        intake.setSpeed(0);
+        shooter.setSpeed(0);
     }
 }
