@@ -49,7 +49,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default command is xboxArcadeDrive. This command will run unless another command is listed below.
-    drivetrain.setDefaultCommand(xboxTankDrive()); 
+    drivetrain.setDefaultCommand(tankDrive()); 
     
     new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake)); // Opens and closes the intake.
     new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake)); // Runs the intake.
@@ -77,7 +77,7 @@ public class RobotContainer {
    * @return The command to run in teleop.
    */
   public Command joystickArcadeDrive() {
-    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(2), () -> -joystick.getRawAxis(1), Constants.Drivetrain.squareInputs);
+    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(2), () -> -joystick.getRawAxis(1), Constants.DriveConstants.squareInputs);
   }
   
   /**
@@ -86,7 +86,7 @@ public class RobotContainer {
    * @return The command to run in teleop.
    */
   public Command xboxArcadeDrive() {
-    return new ArcadeDrive(drivetrain, () -> -xbox.getLeftY(), () -> xbox.getRightX(), Constants.Drivetrain.squareInputs);
+    return new ArcadeDrive(drivetrain, () -> -xbox.getLeftY(), () -> xbox.getRightX(), Constants.DriveConstants.squareInputs);
   }
 
   /**
