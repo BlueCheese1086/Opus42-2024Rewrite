@@ -14,11 +14,4 @@ public class ToggleIntake extends CommandBase {
     public void execute() {
         intake.toggleIntake();
     }
-
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
-
-    public void end(boolean interr) {}
 }

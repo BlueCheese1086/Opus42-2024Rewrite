@@ -1,47 +1,42 @@
 package frc.robot.subsystems.Climb;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.DifferentialDrive;
-import frc.robot.Reset;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Constants;
+
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants.Direction;
+import frc.robot.Constants.RobotMap;
 
 public class Climb extends SubsystemBase{
-    // Motor config
-    private final CANSparkMax frontLeftMotor = new CANSparkMax(Constants.Drivetrain.FRONT_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_ID, MotorType.kBrushless);
-    private final CANSparkMax backLeftMotor = new CANSparkMax(Constants.Drivetrain.BACK_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax backRightMotor = new CANSparkMax(Constants.Drivetrain.BACK_RIGHT_ID, MotorType.kBrushless);
+    // Motor+Solenoid config
+    private final CANSparkMax leftMotor = new CANSparkMax(RobotMap.CLIMB_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax rightMotor = new CANSparkMax(RobotMap.CLIMB_RIGHT_ID, MotorType.kBrushless);
+    private final Solenoid climbLock = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.CLIMB_SOLENOID_ID);
 
-    // List for quick reset
-    private final CANSparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
-
-    // DifferentialDrive class is very useful!
-    public final DifferentialDrive diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
-
-    /** Creates a new Drivetrain. */
+    /** Creates a new Climb. */
     public Climb() {
-        Reset.reset(motors);
-
-        frontLeftMotor.setInverted(true);
-        backLeftMotor.follow(frontLeftMotor);
-        backRightMotor.follow(frontRightMotor);
+        rightMotor.follow(leftMotor, true);
     }
 
-    @Override
-    public void periodic() {}
-
-    @Override
-    public void simulationPeriodic() {}
-
-    public void arcadeDrive(double xAxisSpeed, double zAxisRotate, boolean squareInputs){
-        diffDrive.arcadeDrive(xAxisSpeed, zAxisRotate, squareInputs);
-        
+    public void start(Direction direction) {
+        switch (direction) {
+            case UP:
+                leftMotor.set(1);
+                break;
+            case DOWN:
+                leftMotor.set(-1);
+                break;
+        }
     }
 
-    public void tankDrive(double leftMotor, double rightMotor, boolean squareInputs){
-        diffDrive.tankDrive(leftMotor, rightMotor, squareInputs);
+    public void stop() {
+        leftMotor.set(0);
+    }
+
+    public void toggleLock() {
+        climbLock.set(!climbLock.get());
     }
 }

@@ -1,6 +1,5 @@
 package frc.robot;
 
-// Import
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -14,14 +13,12 @@ import edu.wpi.first.wpilibj.RobotBase;
  * project.
  */
 public final class Main {
-  private Main() {}
-
   /**
    * Main initialization function. Do not perform any other initialization here.
    *
    * <p>If you change your main robot class, change the parameter type.
    */
   public static void main(String... args) {
-    RobotBase.startRobot(RobotMain::new);
+    RobotBase.startRobot(Robot::new);
   }
 }

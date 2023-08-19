@@ -1,48 +1,37 @@
 package frc.robot.subsystems.Tower;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Constants;
-import frc.robot.Reset;
 
-public class Tower extends SubsystemBase{
-    // Motor declaration
-    //private final Talon launcher1 = new Talon(Constants.Launcher.LAUNCHER_X_ID);
-    //private final Talon launcher2 = new Talon(Constants.Launcher.LAUNCHER_Y_ID);
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-    private final CANSparkMax tower1 = new CANSparkMax(Constants.Tower.TOWER_ONE_ID, MotorType.kBrushless);
-    private final CANSparkMax tower2 = new CANSparkMax(Constants.Tower.TOWER_TWO_ID, MotorType.kBrushless);
-    private final CANSparkMax tower3 = new CANSparkMax(Constants.Tower.TOWER_THREE_ID, MotorType.kBrushless);
-    private final CANSparkMax tower4 = new CANSparkMax(Constants.Tower.TOWER_FOUR_ID, MotorType.kBrushless);
+import frc.robot.Constants.Direction;
+import frc.robot.Constants.RobotMap;
 
-    // List for quick reset
-    private final CANSparkMax[] motors = {tower1, tower2, tower3, tower4};
+public class Tower extends SubsystemBase {
+    private final CANSparkMax tower1 = new CANSparkMax(RobotMap.TOWER_ONE_ID, MotorType.kBrushless);
+    private final CANSparkMax tower2 = new CANSparkMax(RobotMap.TOWER_TWO_ID, MotorType.kBrushless);
+    private final CANSparkMax tower3 = new CANSparkMax(RobotMap.TOWER_THREE_ID, MotorType.kBrushless);
+    private final CANSparkMax tower4 = new CANSparkMax(RobotMap.TOWER_FOUR_ID, MotorType.kBrushless);
 
-    public Tower(){
-        // Firmware reset
-        Reset.reset(motors);
-
-        tower4.follow(tower1, true);
+    public Tower() {
+        tower2.follow(tower1, true);
         tower3.follow(tower1);
         tower4.follow(tower1, true);
-        /*
-            tower1, + input
-            tower2, - input
-            tower3, + input
-            tower4, - input
-        */
     }
 
-    public void runTower(){
-        tower1.set(0.25);
-    }
-    
-    public void clearTower(){
-        tower1.set(0.25);
+    public void start(Direction direction) {
+        switch (direction) {
+            case UP:
+                tower1.set(1);
+                break;
+            case DOWN:
+                tower1.set(-1);
+                break;
+        }
     }
 
-    public void stopTower(){
+    public void stop() {
         tower1.set(0);
     }
 }

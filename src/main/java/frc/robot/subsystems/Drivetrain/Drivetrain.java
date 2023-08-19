@@ -1,61 +1,80 @@
 package frc.robot.subsystems.Drivetrain;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants;
-import frc.robot.DifferentialDrive;
-import frc.robot.Reset;
+import frc.robot.Constants.RobotMap;
+import frc.robot.Constants.DriveConstants;
 
 public class Drivetrain extends SubsystemBase{
     // Motor config
-    private final CANSparkMax frontLeftMotor = new CANSparkMax(Constants.Drivetrain.FRONT_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_ID, MotorType.kBrushless);
-    private final CANSparkMax backLeftMotor = new CANSparkMax(Constants.Drivetrain.BACK_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax backRightMotor = new CANSparkMax(Constants.Drivetrain.BACK_RIGHT_ID, MotorType.kBrushless);
+    private final CANSparkMax frontLeftMotor = new CANSparkMax(RobotMap.FRONT_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax frontRightMotor = new CANSparkMax(RobotMap.FRONT_RIGHT_ID, MotorType.kBrushless);
+    private final CANSparkMax backLeftMotor = new CANSparkMax(RobotMap.BACK_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax backRightMotor = new CANSparkMax(RobotMap.BACK_RIGHT_ID, MotorType.kBrushless);
 
     // Encoder config
-    private final RelativeEncoder frontLeftEncoder = frontLeftMotor.getEncoder();
-
-    // List for quick reset
-    private final CANSparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
-
-    // DifferentialDrive class is very useful!
-    public final DifferentialDrive diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
+    private final RelativeEncoder leftEncoder = frontLeftMotor.getEncoder();
+    private final RelativeEncoder rightEncoder = frontRightMotor.getEncoder();
 
     /** Creates a new Drivetrain. */
     public Drivetrain() {
-        Reset.reset(motors);
-
         frontLeftMotor.setInverted(true);
-        backLeftMotor.follow(frontLeftMotor, false);
-        frontRightMotor.setInverted(false);
-        backRightMotor.follow(frontRightMotor, false);
+        backLeftMotor.follow(frontLeftMotor);
+        backRightMotor.follow(frontRightMotor);
     }
 
-    @Override
-    public void periodic() {}
+    /** Drives the robot with the y axis of one joystick and the x axis of another.  Drives robots in a way similar to how most games are played. */
+    public void arcadeDrive(double xSpeed, double zRotation) {
+        // Applies a deadband to the inputs.
+        MathUtil.applyDeadband(xSpeed, DriveConstants.deadband);
+        MathUtil.applyDeadband(zRotation, DriveConstants.deadband);
 
-    @Override
-    public void simulationPeriodic() {}
+        // Square the inputs (while preserving the sign) to increase fine control while permitting full power.
+        if (DriveConstants.squareInputs) {
+            xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
+            zRotation = Math.copySign(zRotation * zRotation, zRotation);
+        }
 
-    public void arcadeDrive(double xAxisSpeed, double zAxisRotate, boolean squareInputs){
-        diffDrive.arcadeDrive(xAxisSpeed, zAxisRotate, squareInputs);
-    }
+        // Creates the saturated speeds of the motors
+        double leftSpeed = xSpeed - zRotation;
+        double rightSpeed = xSpeed + zRotation;
 
-    public void tankDrive(double leftMotor, double rightMotor, boolean squareInputs){
-        diffDrive.tankDrive(leftMotor, rightMotor, squareInputs);
-    }
+        // Finds the maximum possible value of throttle + turn along the vector that the joystick is pointing, and then desaturates the wheel speeds.
+        double greaterInput = Math.max(Math.abs(xSpeed), Math.abs(zRotation));
+        double lesserInput = Math.min(Math.abs(xSpeed), Math.abs(zRotation));
+        if (greaterInput == 0.0) {
+            leftSpeed = 0;
+            rightSpeed = 0;
+        } else {
+            double saturatedInput = (greaterInput + lesserInput) / greaterInput;
+            leftSpeed /= saturatedInput;
+            rightSpeed /= saturatedInput;
+        }
 
-    public double getInches() {
-        double result = frontLeftMotor.getEncoder().getPosition();
-
-        return result;
+        // Sets the speed of the motors.
+        frontLeftMotor.set(leftSpeed * DriveConstants.maxSpeed);
+        frontRightMotor.set(rightSpeed * DriveConstants.maxSpeed);
     }
 
     public void resetEncoders() {
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
+    }
 
+    public double getLeftDistanceInch() {
+        return leftEncoder.getPosition();
+    }
+
+    public double getRightDistanceInch() {
+        return rightEncoder.getPosition();
+    }
+
+    public double getAverageDistanceInch() {
+        return (getLeftDistanceInch() + getRightDistanceInch()) / 2.0;
     }
 }
