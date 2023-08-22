@@ -61,6 +61,10 @@ public class Drivetrain extends SubsystemBase{
         frontRightMotor.set(rightSpeed * DriveConstants.maxSpeed);
     }
 
+    public double getAvgInches() {
+        return frontLeftMotor.getEncoder().getPosition();
+    }
+
     public void resetEncoders() {
         leftEncoder.setPosition(0);
         rightEncoder.setPosition(0);

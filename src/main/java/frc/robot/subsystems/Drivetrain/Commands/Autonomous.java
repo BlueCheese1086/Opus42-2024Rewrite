@@ -32,12 +32,12 @@ public class Autonomous extends SequentialCommandGroup {
         
         addCommands(
             new DriveDistance(drivetrain, speed, inches),
-            new RunClimb(climb, Direction.UP, seconds), // This might not work the way I think it works...
-            new RunIntake(intake, Direction.DOWN, seconds),
-            new RunShooter(shooter, Direction.UP, seconds),
-            new RunTower(tower, Direction.UP, seconds),
-            new ToggleIntake(intake),
-            new TurnDistance(drivetrain, speed, degrees)
+            new SetIntake(intake),
+            new RunIntake(intake, speed, seconds),
+            new RunTower(tower, speed, seconds),
+            new AimShooter(shooter, degrees),
+            new RunShooter(shooter, speed, seconds),
+            new RunClimb(climb, speed, inches)
         );
     }
 }

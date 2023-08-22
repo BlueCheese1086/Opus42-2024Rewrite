@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants.Direction;
 import frc.robot.Constants.RobotMap;
 
 public class Intake extends SubsystemBase{
@@ -22,30 +21,21 @@ public class Intake extends SubsystemBase{
         rightIntakeMotor.follow(topIntakeMotor, true);
     }
 
-    public void toggleIntake() {
-        intakeSolenoid.toggle();
+    public void setState(boolean state) {
+        intakeSolenoid.set(state);
     }
 
-    public void start(Direction direction) {
+    public void set(double speed) {
         if (intakeSolenoid.get()){
-            switch (direction) {
-                case UP:
-                    topIntakeMotor.set(1);
-                    leftIntakeMotor.set(1);
-                    rightIntakeMotor.set(1);
-                    break;
-                case DOWN:
-                    topIntakeMotor.set(-1);
-                    leftIntakeMotor.set(-1);
-                    rightIntakeMotor.set(-1);
-                    break;
-            }
+            topIntakeMotor.set(speed);
         }
     }
 
-    public void stop() {
-        topIntakeMotor.set(0);
-        leftIntakeMotor.set(0);
-        rightIntakeMotor.set(0);
+    public double get() {
+        return topIntakeMotor.get();
+    }
+    
+    public boolean getState() {
+        return intakeSolenoid.get();
     }
 }

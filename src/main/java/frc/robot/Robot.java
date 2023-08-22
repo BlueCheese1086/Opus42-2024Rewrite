@@ -10,17 +10,15 @@ public class Robot extends TimedRobot {
   private Command autonomousCommand;
   private Command teleopCommand;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any initialization code.
-   */
+  /** This function is run when the robot is first started up and should be used for any initialization code. */
   @Override
   public void robotInit() {
     // Creates our RobotContainer.  This will create all our button bindings, and put our chosen drive programs on the dashboard.
     RobotContainer robotContainer = new RobotContainer();
 
     // Gives this class the commands to run in each mode.
-    autonomousCommand = robotContainer.getAutonomousCommand();
-    teleopCommand = robotContainer.getTeleopCommand();
+    this.autonomousCommand = robotContainer.getAutonomousCommand();
+    this.teleopCommand = robotContainer.getTeleopCommand();
   }
 
   /** This function is called every 20 ms regardless of mode. */
@@ -30,7 +28,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
-  /** This function is called once each time the robot enter Autonomous mode. */
+  /** This function is called once each time the robot enters Autonomous mode. */
   @Override
   public void autonomousInit() {
     autonomousCommand.schedule();
@@ -42,7 +40,7 @@ public class Robot extends TimedRobot {
     autonomousCommand.cancel();
   }
 
-  /** This function is called once each time the robot enter Teleop mode. */
+  /** This function is called once each time the robot enters Teleop mode. */
   @Override
   public void teleopInit() {
     teleopCommand.schedule();
