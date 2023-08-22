@@ -18,12 +18,8 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     public enum Enums {
-        ON,
-        OFF,
         IN,
         OUT,
-        OPEN,
-        CLOSED,
         UP,
         DOWN
     }

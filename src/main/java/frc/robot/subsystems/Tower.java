@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Tower;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,7 +21,11 @@ public class Tower extends SubsystemBase {
         tower4.follow(tower1, true);
     }
 
-    public void set(double speed) {
+    public void setSpeed(double speed) {
         tower1.set(speed);
+    }
+
+    public double getSpeed() {
+        return tower1.get();
     }
 }

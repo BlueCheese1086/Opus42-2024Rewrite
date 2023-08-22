@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Climb;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -22,21 +22,26 @@ public class Climb extends SubsystemBase{
     // Solenoid Config
     private final Solenoid lock = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.CLIMB_SOLENOID_ID);
 
-    /** Creates a new Drivetrain. */
+    /** Creates a new Climb subsystem. */
     public Climb() {
         rightClimb.follow(leftClimb);
     }
 
-    public void set(double speed) {
+    public void setSpeed(double speed) {
         leftClimb.set(speed);
     }
 
-    public void lock() {
-        lock.set(false);
+    public double getSpeed() {
+        return leftClimb.get();
     }
 
-    public void unlock() {
-        lock.set(true);
+    public void setLock(boolean state) {
+        // Flipped because false is locked, and I want to think of this more as whether or not the lock is enabled.
+        lock.set(!state);
+    }
+
+    public void toggleLock() {
+        lock.toggle();
     }
 
     public boolean getLock() {
@@ -53,9 +58,5 @@ public class Climb extends SubsystemBase{
 
     public double getAvgDistance() {
         return (getLeftDistance() + getRightDistance()) / 2;
-    }
-
-    public void toggleLock() {
-        lock.set(!lock.get());
     }
 }
