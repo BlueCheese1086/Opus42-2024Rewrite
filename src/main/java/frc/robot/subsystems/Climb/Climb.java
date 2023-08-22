@@ -1,47 +1,57 @@
 package frc.robot.subsystems.Climb;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.DifferentialDrive;
-import frc.robot.Reset;
-
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Constants;
+
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants.MotorIds;
 
 public class Climb extends SubsystemBase{
     // Motor config
-    private final CANSparkMax frontLeftMotor = new CANSparkMax(Constants.Drivetrain.FRONT_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_ID, MotorType.kBrushless);
-    private final CANSparkMax backLeftMotor = new CANSparkMax(Constants.Drivetrain.BACK_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax backRightMotor = new CANSparkMax(Constants.Drivetrain.BACK_RIGHT_ID, MotorType.kBrushless);
+    private final CANSparkMax leftClimb = new CANSparkMax(MotorIds.FRONT_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax rightClimb = new CANSparkMax(MotorIds.FRONT_RIGHT_ID, MotorType.kBrushless);
 
-    // List for quick reset
-    private final CANSparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
+    // Encoder Config
+    private final RelativeEncoder leftEncoder = leftClimb.getEncoder();
+    private final RelativeEncoder rightEncoder = rightClimb.getEncoder();
 
-    // DifferentialDrive class is very useful!
-    public final DifferentialDrive diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
+    // Solenoid Config
+    private final Solenoid lock = new Solenoid(PneumaticsModuleType.CTREPCM, MotorIds.CLIMB_SOLENOID_ID);
 
     /** Creates a new Drivetrain. */
     public Climb() {
-        Reset.reset(motors);
-
-        frontLeftMotor.setInverted(true);
-        backLeftMotor.follow(frontLeftMotor);
-        backRightMotor.follow(frontRightMotor);
+        rightClimb.follow(leftClimb);
     }
 
-    @Override
-    public void periodic() {}
-
-    @Override
-    public void simulationPeriodic() {}
-
-    public void arcadeDrive(double xAxisSpeed, double zAxisRotate, boolean squareInputs){
-        diffDrive.arcadeDrive(xAxisSpeed, zAxisRotate, squareInputs);
-        
+    public void set(double speed) {
+        leftClimb.set(speed);
     }
 
-    public void tankDrive(double leftMotor, double rightMotor, boolean squareInputs){
-        diffDrive.tankDrive(leftMotor, rightMotor, squareInputs);
+    public void lock() {
+        lock.set(false);
+    }
+
+    public void unlock() {
+        lock.set(true);
+    }
+
+    public boolean getLock() {
+        return lock.get();
+    }
+
+    public double getLeftDistance() {
+        return leftEncoder.getPosition();
+    }
+
+    public double getRightDistance() {
+        return rightEncoder.getPosition();
+    }
+
+    public double getAvgDistance() {
+        return (getLeftDistance() + getRightDistance()) / 2;
     }
 }

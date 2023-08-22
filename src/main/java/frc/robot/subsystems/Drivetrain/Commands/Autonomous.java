@@ -26,7 +26,7 @@ public class Autonomous extends SequentialCommandGroup {
     public Autonomous(Drivetrain drivetrain, Intake intake, Tower tower, Shooter shooter, Climb climb) {
         addCommands(
             new DriveDistance(drivetrain, speed, inches),
-            new ToggleIntake(intake),
+            new SetIntake(intake),
             new RunIntake(intake, speed, seconds),
             new RunTower(tower, speed, seconds),
             new AimShooter(shooter, degrees),

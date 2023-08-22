@@ -17,45 +17,48 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public enum Enums {
+        ON,
+        OFF,
+        IN,
+        OUT,
+        OPEN,
+        CLOSED,
+        UP,
+        DOWN
+    }
+
     public static final int COMPRESSOR_ID = 0;
     public static final int HOOD_SERVO_ID = 0; // Adjusts launcher angle
 
-    // Assume that all motors are CANSparkMax unless stated otherwise.
-
-    public static class Drivetrain { // Drivetrain Motor IDs
+    // Assume that all motors are CANSparkMaxes unless stated otherwise.
+    public static class MotorIds {
+        // Drivetrain
         public static final int FRONT_LEFT_ID = 1;
         public static final int FRONT_RIGHT_ID = 2;
         public static final int BACK_LEFT_ID = 3;
         public static final int BACK_RIGHT_ID = 4;
-    }
 
-    public static class Climb { // Climb Motor IDs
+        // Climb
         public static final int CLIMB_LEFT_ID = 11;
         public static final int CLIMB_RIGHT_ID = 12;
-
-        public static final int CLIMB_SOLENOID_ID = 2;
-    }
-
-    public static class Intake { // Intake Motor IDs
+        public static final int CLIMB_SOLENOID_ID = 2; // Solenoid
+        
+        // Intake
         public static final int LEFT_INTAKE_ID = 21;
         public static final int RIGHT_INTAKE_ID = 22;
-        
         public static final int TOP_INTAKE_ID = 31;
-
-        public static final int INTAKE_SOLENOID_ID = 3;
-    }
-
-    public static class Tower { // Tower Motor IDs
+        public static final int INTAKE_SOLENOID_ID = 3; // Solenoid
+        
+        // Tower
         public static final int TOWER_ONE_ID = 41; // back top
         public static final int TOWER_TWO_ID = 42; // back bottom
         public static final int TOWER_THREE_ID = 43; // front bottom
         public static final int TOWER_FOUR_ID = 44; // front top
-    }
-
-    public static class Shooter { // Shooter Motor IDs
+        
+        // Shooter
         public static final int LAUNCHER_X_ID = 51; // TalonFX
         public static final int LAUNCHER_Y_ID = 52; // TalonFX
-
         public static final int HOOD_ID = 0; // Servo
     }
     

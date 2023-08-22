@@ -3,9 +3,13 @@ package frc.robot;
 // Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.robot.Constants.Enums;
 import frc.robot.subsystems.Drivetrain.Drivetrain;
 import frc.robot.subsystems.Drivetrain.Commands.*;
 import frc.robot.subsystems.Intake.Intake;
@@ -19,25 +23,38 @@ import frc.robot.subsystems.Climb.Commands.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link RobotMain}
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // Controllers
-  private final Joystick joystick = new Joystick(1);
-  private final XboxController xbox = new XboxController(2);
-
-  // Subsystems
+  // Creates Subsystems
   private final Drivetrain drivetrain = new Drivetrain();
   private final Intake intake = new Intake();
   private final Tower tower = new Tower();
   private final Shooter shooter = new Shooter();
   private final Climb climb = new Climb();
 
+  // Creates Controllers
+  private final XboxController xbox = new XboxController(0);
+
+  // Creates Buttons
+  private JoystickButton aButton, bButton, xButton, leftBumper, rightBumper, leftStick;
+  private AxisButton leftTrigger, rightTrigger;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
+    // Initializes buttons
+    aButton = new JoystickButton(xbox, Button.kA.value);
+    bButton = new JoystickButton(xbox, Button.kB.value);
+    xButton = new JoystickButton(xbox, Button.kX.value);
+    leftBumper = new JoystickButton(xbox, Button.kLeftBumper.value);
+    rightBumper = new JoystickButton(xbox, Button.kRightBumper.value);
+    leftStick = new JoystickButton(xbox, Button.kLeftStick.value);
+    leftTrigger = new AxisButton(xbox, Axis.kLeftTrigger.value, 0.5);
+    rightTrigger = new AxisButton(xbox, Axis.kRightTrigger.value, 0.5);
+
+    // Configures the button bindings
     configureButtonBindings();
   }
 
@@ -48,60 +65,29 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Default command is xboxArcadeDrive. This command will run unless another command is listed below.
-    drivetrain.setDefaultCommand(tankDrive()); 
-    
-    new JoystickButton(joystick, 2).onTrue(new ToggleIntake(intake)); // Opens and closes the intake.
-    new JoystickButton(joystick, 1).whileTrue(new RunIntake(intake)); // Runs the intake.
-    new JoystickButton(joystick, 3).whileTrue(new ClearIntake(intake)); // Runs the intake, but in reverse.
+    xButton.onTrue(new SetIntake(intake, (intake.getState()) ? Enums.IN : Enums.OUT)); // Toggles the state of the intake.
+    aButton.whileTrue(new RunIntake(intake, Enums.IN)); // Runs the intake.
+    bButton.whileTrue(new RunIntake(intake, Enums.OUT)); // Runs the intake in reverse.
 
-    new JoystickButton(joystick, 5).whileTrue(new RunTower(tower)); // Runs the tower.
-    new JoystickButton(joystick, 6).whileTrue(new ClearTower(tower)); // Runs the tower, but in reverse.
-    
-    /*
-    new JoystickButton(xbox, Button.kX.value).onTrue(new ToggleIntake(intake));
-    new JoystickButton(xbox, Button.kA.value).whileTrue(new RunIntake(intake));
-    new JoystickButton(xbox, Button.kB.value).whileTrue(new ClearIntake(intake));
+    leftBumper.onTrue(new SetLock(climb, Enums.OFF)); // Unlocks the climb mechanism when you want to use it.
+    leftBumper.whileTrue(new RunClimb(climb, Enums.UP)); // Moves the climb mechanism up.
+    leftBumper.onFalse(new SetLock(climb, Enums.ON)); // Locks the climb mechanism to prevent it from moving.
+    leftTrigger.onTrue(new SetLock(climb, Enums.OFF)); // Unlocks the climb mechanism when you want to use it.
+    leftTrigger.whileTrue(new RunClimb(climb, Enums.DOWN)); // Moves the climb mechanism down.
+    leftTrigger.onFalse(new SetLock(climb, Enums.ON)); // Locks the climb mechanism to prevent it from moving.
+    leftStick.onTrue(new SetLock(climb, climb.getLock() ? Enums.ON : Enums.OFF)); // Manually toggles the lock on the climb subsystem.
 
-    new JoystickButton(xbox, Button.kLeftBumper.value).whileTrue(new RunTower(tower));
-    new JoystickButton(xbox, Button.kRightBumper.value).whileTrue(new ClearTower(tower));
-    */
+    rightBumper.whileTrue(new RunTower(tower, Enums.UP)).whileTrue(new RunShooter(shooter)); // Runs the tower up and runs the shooter.
+    rightTrigger.whileTrue(new RunTower(tower, Enums.DOWN)); // Runs the tower down.
   }
 
-  // NOTE: All commands with "Joystick" in the name may require extra modification due to differences in joystick mapping.
-
-  /**
-   * Use this to pass the ArcadeDrive command to the main {@link RobotMain} class.
-   * Input type: Joystick
-   * 
-   * @return The command to run in teleop.
-   */
-  public Command joystickArcadeDrive() {
-    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(2), () -> -joystick.getRawAxis(1), Constants.DriveConstants.squareInputs);
-  }
-  
-  /**
-   * Use this to pass the ArcadeDrive command to the main {@link RobotMain} class.
-   * 
-   * @return The command to run in teleop.
-   */
-  public Command xboxArcadeDrive() {
+  /** Use this to pass the Teleop command to the main {@link Robot} class. */
+  public Command getTeleopCommand() {
     return new ArcadeDrive(drivetrain, () -> -xbox.getLeftY(), () -> xbox.getRightX(), Constants.DriveConstants.squareInputs);
   }
 
-  /**
-   * Use this to pass the TankDrive command to the main {@link RobotMain} class.
-   * 
-   * @return The command to run in teleop.
-   */
-  public Command tankDrive(){
-    return new TankDrive(drivetrain, () -> -xbox.getLeftY(), () -> -xbox.getRightY(), Constants.DriveConstants.squareInputs);
-  }
-
-  /**
-   * This passes the Autonomous command to the {@link RobotMain} class.
-   */
-  public Command autonomous() {
+  /** This passes the Autonomous command to the {@link Robot} class. */
+  public Command getAutonomousCommand() {
     return new Autonomous(drivetrain, intake, tower, shooter, climb);
   }
 }   

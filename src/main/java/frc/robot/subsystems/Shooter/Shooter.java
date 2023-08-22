@@ -1,49 +1,62 @@
 package frc.robot.subsystems.Shooter;
 
-
-
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.DifferentialDrive;
-import frc.robot.Reset;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import frc.robot.Constants.MotorIds;
+import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase{
     // Motor config
-    private final CANSparkMax frontLeftMotor = new CANSparkMax(Constants.Drivetrain.FRONT_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_ID, MotorType.kBrushless);
-    private final CANSparkMax backLeftMotor = new CANSparkMax(Constants.Drivetrain.BACK_LEFT_ID, MotorType.kBrushless);
-    private final CANSparkMax backRightMotor = new CANSparkMax(Constants.Drivetrain.BACK_RIGHT_ID, MotorType.kBrushless);
+    private final TalonFX x = new TalonFX(MotorIds.LAUNCHER_X_ID);
+    private final TalonFX y = new TalonFX(MotorIds.LAUNCHER_Y_ID);
+    private final Servo hood = new Servo(MotorIds.HOOD_ID);
 
-    // List for quick reset
-    private final CANSparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
-
-    // DifferentialDrive class is very useful!
-    public final DifferentialDrive diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
-
-    /** Creates a new Drivetrain. */
+    /** Creates a new Shooter. */
     public Shooter() {
-        Reset.reset(motors);
+        x.config_kP(0, ShooterConstants.LAUNCHER_KP);
+        x.config_kI(0, ShooterConstants.LAUNCHER_KI);
+        x.config_kD(0, ShooterConstants.LAUNCHER_KD);
+        x.config_kF(0, ShooterConstants.LAUNCHER_KF);
 
-        frontLeftMotor.setInverted(true);
-        backLeftMotor.follow(frontLeftMotor);
-        backRightMotor.follow(frontRightMotor);
+        y.setInverted(true);
+        y.follow(x, FollowerType.PercentOutput);
+
+        y.config_kP(0, ShooterConstants.LAUNCHER_KP);
+        y.config_kI(0, ShooterConstants.LAUNCHER_KI);
+        y.config_kD(0, ShooterConstants.LAUNCHER_KD);
+        y.config_kF(0, ShooterConstants.LAUNCHER_KF);
     }
 
-    @Override
-    public void periodic() {}
-
-    @Override
-    public void simulationPeriodic() {}
-
-    public void arcadeDrive(double xAxisSpeed, double zAxisRotate, boolean squareInputs){
-        diffDrive.arcadeDrive(xAxisSpeed, zAxisRotate, squareInputs);
-        
+    /**
+     * Runs the shooter at a specified speed.
+     * @param speed The percent speed the motors will move at in a range of -1 to 1.
+     */
+    public void setSpeed(double speed) {
+        set(speed);
     }
 
-    public void tankDrive(double leftMotor, double rightMotor, boolean squareInputs){
-        diffDrive.tankDrive(leftMotor, rightMotor, squareInputs);
+    /**
+     * Runs the shooter at a specified speed.
+     * @param speed The percent speed the motors will move at in a range of -1 to 1.
+     */
+    public void set(double speed) {
+        x.set(TalonFXControlMode.PercentOutput, speed);
+    }
+
+    /**
+     * Sets the servo hood position.
+     * @param pos The desired position of the servo hood in a range of 0 to 180.
+     */
+    public void setHoodPosition(double degrees) {
+        hood.setAngle(degrees);
+    }
+
+    /** Gets the servo hood position. */
+    public double getHoodPosition() {
+        return hood.getAngle();
     }
 }

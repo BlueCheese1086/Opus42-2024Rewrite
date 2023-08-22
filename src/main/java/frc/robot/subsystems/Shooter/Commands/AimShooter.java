@@ -5,29 +5,20 @@ import frc.robot.subsystems.Shooter.Shooter;
 
 public class AimShooter extends CommandBase {
     private final Shooter shooter;
-    private final double start;
-    private final double seconds;
-    private final double speed;
+    private final double degrees;
 
-    public AimShooter(Shooter shooter, double speed, double seconds){
+    public AimShooter(Shooter shooter, double degrees){
         this.shooter = shooter;
-        this.speed = speed;
-        this.seconds = seconds;
-
-        start = System.currentTimeMillis();
+        this.degrees = degrees;
     }
 
     @Override
     public void execute() {
-        shooter.setSpeed(speed);
+        shooter.setHoodPosition(degrees);
     }
 
     @Override
     public boolean isFinished() {
-        return (System.currentTimeMillis() - start) >= seconds;
-    }
-
-    public void end(boolean interr) {
-        shooter.setSpeed(0);
+        return true;
     }
 }
