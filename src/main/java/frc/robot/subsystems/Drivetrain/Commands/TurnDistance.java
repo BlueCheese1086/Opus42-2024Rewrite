@@ -29,7 +29,7 @@ public class TurnDistance  extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return drivetrain.getAverageDistanceInch() == inches;
+        return drivetrain.getAverageDistanceInch() == degrees;
     }
 
     @Override
@@ -37,4 +37,3 @@ public class TurnDistance  extends CommandBase {
         drivetrain.arcadeDrive(0, 0);
     }
 }
-

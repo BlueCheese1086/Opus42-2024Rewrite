@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import frc.robot.Constants.MotorIds;
+import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase{
     // Motor config
-    private final TalonFX x = new TalonFX(MotorIds.LAUNCHER_X_ID);
-    private final TalonFX y = new TalonFX(MotorIds.LAUNCHER_Y_ID);
-    private final Servo hood = new Servo(MotorIds.HOOD_ID);
+    private final TalonFX x = new TalonFX(RobotMap.LAUNCHER_X_ID);
+    private final TalonFX y = new TalonFX(RobotMap.LAUNCHER_Y_ID);
+    private final Servo hood = new Servo(RobotMap.HOOD_ID);
 
     /** Creates a new Shooter. */
     public Shooter() {
